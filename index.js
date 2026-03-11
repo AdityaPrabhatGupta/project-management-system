@@ -6,7 +6,6 @@ import userRoutes from "./src/routes/userRoute.js";
 import projectRoutes from "./src/routes/projectRoute.js";
 import taskRoutes from "./src/routes/taskRoute.js";
 import dashboardRoutes from "./src/routes/dashboardRoute.js";
-
 import { initialiseDatabase } from "./src/config/index.js";
 
 dotenv.config();
@@ -14,7 +13,7 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
   methods: ["GET","POST","PUT","DELETE","OPTIONS"],
   allowedHeaders: ["Content-Type","Authorization"],
   credentials: true
@@ -25,11 +24,13 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("API is running ✅");
 });
+
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/notices", noticeRoutes);
+
 initialiseDatabase();
 
 const PORT = process.env.PORT || 5000;
