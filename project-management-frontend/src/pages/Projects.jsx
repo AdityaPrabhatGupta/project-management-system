@@ -353,9 +353,9 @@ export default function Projects() {
             <>
               <div className="proj-stats">
                 {[
-                  { label:"Total Projects", value:projects.length, icon:"🗂️", glow:"rgba(139,92,246,0.2)",  iconBg:"rgba(139,92,246,0.09)", bar:"linear-gradient(90deg,#8b5cf6,#6366f1)", barW:"80%",              foot:"All projects" },
-                  { label:"Active",         value:active,          icon:"🔥", glow:"rgba(6,182,212,0.2)",   iconBg:"rgba(6,182,212,0.09)",  bar:"linear-gradient(90deg,#06b6d4,#0891b2)", barW:`${pct(active)}%`,    foot:"Currently running" },
-                  { label:"Completed",      value:completed,       icon:"🏆", glow:"rgba(16,185,129,0.2)",  iconBg:"rgba(16,185,129,0.09)", bar:"linear-gradient(90deg,#10b981,#059669)", barW:`${pct(completed)}%`, foot:`${pct(completed)}% done rate` },
+                  { label:"Total Projects", value:projects.length, icon:"🗂️", glow:"rgba(139,92,246,0.2)", iconBg:"rgba(139,92,246,0.09)", bar:"linear-gradient(90deg,#8b5cf6,#6366f1)", barW: projects.length > 0 ? `${Math.min(100, projects.length * 10)}%` : "4%", foot:"All projects" },
+                   { label:"Active",         value:active,          icon:"🔥", glow:"rgba(6,182,212,0.2)",  iconBg:"rgba(6,182,212,0.09)",  bar:"linear-gradient(90deg,#06b6d4,#0891b2)", barW: pct(active) > 0 ? `${pct(active)}%` : "4%",    foot:"Currently running" },
+                    { label:"Completed",     value:completed,       icon:"🏆", glow:"rgba(16,185,129,0.2)", iconBg:"rgba(16,185,129,0.09)", bar:"linear-gradient(90deg,#10b981,#059669)", barW: pct(completed) > 0 ? `${pct(completed)}%` : "4%", foot:`${pct(completed)}% done rate` },
                 ].map((c,i) => (
                   <div key={i} className="glass stat-card" style={{"--glow":c.glow,"--icon-bg":c.iconBg}}>
                     <div className="stat-card-top">

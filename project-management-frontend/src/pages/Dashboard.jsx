@@ -467,10 +467,16 @@ export default function Dashboard() {
   const uEmail = user?.email || "";
   const letter = uName.charAt(0).toUpperCase();
 
+  // ✅ Real bar widths — capped at 100%, minimum 4% so bar is always visible
+  const MAX_PROJECTS = 10; // treat 10 projects as "full bar"
+  const MAX_TASKS    = 20; // treat 20 tasks as "full bar"
+  const projectBarW  = stats.totalProjects > 0 ? `${Math.min(100, Math.round((stats.totalProjects / MAX_PROJECTS) * 100))}%` : "4%";
+  const taskBarW     = stats.totalTasks    > 0 ? `${Math.min(100, Math.round((stats.totalTasks    / MAX_TASKS)    * 100))}%` : "4%";
+
   const STAT_CARDS = [
-    { label:"Total Projects",  value:stats.totalProjects,  icon:"🗂️", glow:"rgba(139,92,246,0.2)",  iconBg:"rgba(139,92,246,0.09)", bar:"linear-gradient(90deg,#8b5cf6,#6366f1)", barW:"72%",      foot:"Active & tracked" },
-    { label:"Total Tasks",     value:stats.totalTasks,     icon:"📌", glow:"rgba(6,182,212,0.2)",   iconBg:"rgba(6,182,212,0.09)",  bar:"linear-gradient(90deg,#06b6d4,#0891b2)", barW:"58%",      foot:"Across all projects" },
-    { label:"Completed Tasks", value:stats.completedTasks, icon:"🏆", glow:"rgba(16,185,129,0.2)",  iconBg:"rgba(16,185,129,0.09)", bar:"linear-gradient(90deg,#10b981,#059669)", barW:`${rate}%`, foot:`${rate}% completion rate` },
+    { label:"Total Projects",  value:stats.totalProjects,  icon:"🗂️", glow:"rgba(139,92,246,0.2)",  iconBg:"rgba(139,92,246,0.09)", bar:"linear-gradient(90deg,#8b5cf6,#6366f1)", barW: projectBarW, foot:"Active & tracked" },
+    { label:"Total Tasks",     value:stats.totalTasks,     icon:"📌", glow:"rgba(6,182,212,0.2)",   iconBg:"rgba(6,182,212,0.09)",  bar:"linear-gradient(90deg,#06b6d4,#0891b2)", barW: taskBarW,    foot:"Across all projects" },
+    { label:"Completed Tasks", value:stats.completedTasks, icon:"🏆", glow:"rgba(16,185,129,0.2)",  iconBg:"rgba(16,185,129,0.09)", bar:"linear-gradient(90deg,#10b981,#059669)", barW: rate > 0 ? `${rate}%` : "4%", foot:`${rate}% completion rate` },
   ];
 
   const pinned   = notices.filter(n => n.pinned);
