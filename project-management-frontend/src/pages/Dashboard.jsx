@@ -65,7 +65,6 @@ const css = `
   }
   @keyframes sideIn { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
 
-  /* ── HAMBURGER (dashboard-internal sidebar) ── */
   .db-hamburger { display:none; position:fixed; top:16px; left:16px; z-index:40;
     width:42px; height:42px; border-radius:12px; border:none; cursor:pointer;
     background:rgba(255,255,255,0.85); backdrop-filter:blur(16px);
@@ -92,6 +91,7 @@ const css = `
     .dash-sidebar.sb-open { left:0; }
     .db-overlay.db-ov-visible { display:block; }
   }
+
   .sb-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px 16px; border-bottom: 1px solid rgba(203,213,225,0.35); margin-bottom: 6px; flex-shrink: 0; }
   .sb-gem { width: 36px; height: 36px; background: linear-gradient(135deg, #8b5cf6, #6366f1); border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; box-shadow: 0 4px 14px rgba(139,92,246,0.32); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); flex-shrink: 0; }
   .sb-gem:hover { transform: rotate(15deg) scale(1.08); }
@@ -110,14 +110,13 @@ const css = `
   .sb-badge { margin-left: auto; font-size: 10px; font-weight: 700; background: rgba(139,92,246,0.1); color: #7c3aed; padding: 2px 7px; border-radius: 100px; }
   .sb-spacer { flex: 1; min-height: 0; }
 
-  /* ── RECENT UPDATES PANEL ── */
+  /* ── RECENT UPDATES ── */
   .sb-updates { margin: 10px 0 8px; padding: 11px 12px; background: rgba(139,92,246,0.04); border: 1px solid rgba(139,92,246,0.1); border-radius: 14px; position: relative; overflow: hidden; flex-shrink: 0; }
   .sb-updates::before { content: ''; position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, rgba(139,92,246,0.12), transparent); pointer-events: none; }
   .sb-updates-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
   .sb-updates-title { font-size: 10px; font-weight: 800; color: #7c3aed; text-transform: uppercase; letter-spacing: 1.5px; display: flex; align-items: center; gap: 6px; }
   .sb-updates-dot { width: 6px; height: 6px; border-radius: 50%; background: #8b5cf6; animation: livePulse 2s ease-in-out infinite; }
   .sb-updates-count { font-size: 10px; font-weight: 700; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; padding: 2px 7px; border-radius: 100px; }
-
   .sb-update-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(139,92,246,0.08); animation: fadeUp 0.35s ease both; position: relative; }
   .sb-update-item:last-child { border-bottom: none; padding-bottom: 0; }
   .sb-update-item.pinned-item { background: rgba(139,92,246,0.04); margin: 0 -4px; padding: 6px 4px; border-radius: 7px; border-bottom: 1px solid rgba(139,92,246,0.08); }
@@ -127,7 +126,6 @@ const css = `
   .sb-update-title { font-size: 11px; font-weight: 600; color: #1e1b4b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sb-update-sub { font-size: 10px; color: #94a3b8; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .sb-update-time { font-size: 10px; color: #c7d2fe; flex-shrink: 0; margin-top: 1px; }
-
   .sb-update-del { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border-radius: 5px; border: none; background: rgba(239,68,68,0.08); color: #ef4444; cursor: pointer; font-size: 10px; display: none; align-items: center; justify-content: center; transition: all 0.15s; line-height: 1; }
   .sb-update-item:hover .sb-update-del { display: flex; }
   .sb-update-del:hover { background: rgba(239,68,68,0.18); }
@@ -207,6 +205,8 @@ const css = `
   .stat-bar { height: 100%; border-radius: 100px; background: var(--bar-color); animation: barGrow 1.2s cubic-bezier(0.16,1,0.3,1) 0.5s both; transform-origin: left; }
   @keyframes barGrow { from { width: 0% !important; } }
   .stat-footer { font-size: 11px; color: #94a3b8; padding-top: 10px; border-top: 1px solid rgba(203,213,225,0.35); }
+
+  /* ── PROGRESS CARD ── */
   .progress-card { grid-column: span 12; padding: 26px; animation: cardPop 0.55s cubic-bezier(0.16,1,0.3,1) 0.38s both; }
   .progress-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(139,92,246,0.1); }
   .pc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
@@ -214,7 +214,7 @@ const css = `
   .pc-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
   .pc-rate { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 600; background: linear-gradient(135deg, #8b5cf6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; }
   .prog-track { height: 10px; background: rgba(203,213,225,0.35); border-radius: 100px; overflow: hidden; margin-bottom: 12px; }
-  .prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #8b5cf6, #6366f1, #06b6d4); background-size: 200% 100%; transition: width 1.4s cubic-bezier(0.16,1,0.3,1); animation: shimmer 3s ease-in-out infinite; position: relative; }
+  .prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #8b5cf6, #6366f1, #06b6d4); background-size: 200% 100%; transition: width 1.4s cubic-bezier(0.16,1,0.3,1); animation: shimmer 3s ease-in-out infinite; position: relative; min-width: ${0}; }
   .prog-fill::after { content: ''; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: #fff; border: 3px solid #8b5cf6; border-radius: 50%; box-shadow: 0 2px 8px rgba(139,92,246,0.4); }
   @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
   .prog-labels { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; }
@@ -223,31 +223,44 @@ const css = `
   .milestone { display: flex; align-items: center; gap: 7px; padding: 7px 12px; border-radius: 8px; background: rgba(248,250,252,0.8); border: 1px solid rgba(203,213,225,0.4); font-size: 12px; color: #64748b; transition: all 0.2s; }
   .milestone:hover { border-color: rgba(139,92,246,0.3); color: #7c3aed; }
   .milestone-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── KANBAN (real data) ── */
   .kanban-card { grid-column: span 12; padding: 26px; animation: cardPop 0.55s cubic-bezier(0.16,1,0.3,1) 0.48s both; }
   .kanban-card:hover { transform: translateY(-2px); }
   .kb-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
   .kb-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; color: #1e1b4b; letter-spacing: -0.4px; }
   .kb-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .kb-col { padding: 16px; border-radius: 14px; min-height: 180px; }
-  .kb-col-todo { background: rgba(241,245,249,0.7); } .kb-col-prog { background: rgba(238,242,255,0.7); } .kb-col-done { background: rgba(236,253,245,0.7); }
+  .kb-col-todo { background: rgba(241,245,249,0.7); }
+  .kb-col-prog { background: rgba(238,242,255,0.7); }
+  .kb-col-done { background: rgba(236,253,245,0.7); }
   .kb-col-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .kb-col-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-  .kb-col-todo .kb-col-title { color: #64748b; } .kb-col-prog .kb-col-title { color: #6366f1; } .kb-col-done .kb-col-title { color: #10b981; }
+  .kb-col-todo .kb-col-title { color: #64748b; }
+  .kb-col-prog .kb-col-title { color: #6366f1; }
+  .kb-col-done .kb-col-title { color: #10b981; }
   .kb-count { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
-  .kb-col-todo .kb-count { background: rgba(100,116,139,0.1); color: #64748b; } .kb-col-prog .kb-count { background: rgba(99,102,241,0.1); color: #6366f1; } .kb-col-done .kb-count { background: rgba(16,185,129,0.1); color: #10b981; }
+  .kb-col-todo .kb-count { background: rgba(100,116,139,0.1); color: #64748b; }
+  .kb-col-prog .kb-count { background: rgba(99,102,241,0.1); color: #6366f1; }
+  .kb-col-done .kb-count { background: rgba(16,185,129,0.1); color: #10b981; }
   .kb-task { background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.95); border-radius: 11px; padding: 13px; margin-bottom: 10px; transition: all 0.22s cubic-bezier(0.16,1,0.3,1); cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
   .kb-task:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 6px 20px rgba(139,92,246,0.1); border-color: rgba(139,92,246,0.2); }
   .kb-task-title { font-size: 13px; font-weight: 600; color: #1e1b4b; margin-bottom: 6px; }
   .kb-task-meta { display: flex; align-items: center; justify-content: space-between; }
   .kb-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 100px; }
-  .kb-tag-design { background: rgba(139,92,246,0.1); color: #7c3aed; } .kb-tag-dev { background: rgba(6,182,212,0.1); color: #0891b2; } .kb-tag-ops { background: rgba(249,115,22,0.1); color: #ea580c; }
+  .kb-tag-low    { background: rgba(16,185,129,0.1);  color: #10b981; }
+  .kb-tag-medium { background: rgba(245,158,11,0.1);  color: #d97706; }
+  .kb-tag-high   { background: rgba(239,68,68,0.1);   color: #ef4444; }
   .kb-avatar-row { display: flex; }
   .kb-mini-av { width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #8b5cf6, #6366f1); border: 2px solid #fff; margin-left: -5px; font-size: 9px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; }
+  .kb-mini-av:first-child { margin-left: 0; }
   .kb-empty { font-size: 12px; color: #cbd5e1; text-align: center; padding: 20px 0; }
+
   .dash-loader { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 300px; gap: 16px; }
   .loader-ring { width: 42px; height: 42px; border: 3px solid rgba(139,92,246,0.15); border-top-color: #8b5cf6; border-radius: 50%; animation: spin 0.75s linear infinite; }
   .loader-txt { font-size: 13px; color: #94a3b8; }
   @keyframes spin { to { transform: rotate(360deg); } }
+
   .modal-veil { position: fixed; inset: 0; background: rgba(15,10,40,0.28); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 100; display: flex; align-items: center; justify-content: center; animation: veilIn 0.2s ease both; }
   @keyframes veilIn { from{opacity:0} to{opacity:1} }
   .modal-glass { background: rgba(255,255,255,0.9); backdrop-filter: blur(28px) saturate(200%); -webkit-backdrop-filter: blur(28px) saturate(200%); border: 1px solid rgba(255,255,255,1); border-radius: 24px; width: 400px; overflow: hidden; box-shadow: 0 20px 60px rgba(139,92,246,0.14), 0 4px 16px rgba(0,0,0,0.07); animation: modalPop 0.3s cubic-bezier(0.16,1,0.3,1) both; }
@@ -275,7 +288,6 @@ const css = `
   @keyframes cardPop { from{opacity:0;transform:translateY(20px) scale(0.97)} to{opacity:1;transform:translateY(0) scale(1)} }
   @keyframes fadeUp  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-  /* ── MOBILE ── */
   @media (max-width: 768px) {
     .dash-main { margin-left:0; padding:60px 14px 24px; }
     .topbar { flex-direction:column; gap:14px; margin-bottom:20px; }
@@ -288,7 +300,6 @@ const css = `
     .confirm-glass { width:calc(100vw - 32px); }
     .notice-modal { width:calc(100vw - 32px); }
     .prog-milestones { gap:8px; }
-    .top-actions { width:100%; flex-wrap:wrap; }
     .btn-grad { flex:1; justify-content:center; }
   }
   @media (max-width: 480px) {
@@ -298,28 +309,13 @@ const css = `
   }
 `;
 
-const KANBAN = {
-  todo: [
-    { title:"Design new onboarding flow", tag:"design", tag_cls:"kb-tag-design", assignees:["A","B"] },
-    { title:"Write API documentation",    tag:"dev",    tag_cls:"kb-tag-dev",    assignees:["C"] },
-  ],
-  inProgress: [
-    { title:"Implement auth middleware",  tag:"dev",    tag_cls:"kb-tag-dev",    assignees:["A","D"] },
-    { title:"Set up CI/CD pipeline",      tag:"ops",    tag_cls:"kb-tag-ops",    assignees:["B"] },
-  ],
-  done: [
-    { title:"Database schema design",     tag:"dev",    tag_cls:"kb-tag-dev",    assignees:["C","A"] },
-  ],
-};
-
 const NOTICE_ICONS = ["📢","🚀","✅","⚠️","🔔","📌","💡","🎯","🔧","🎉","👥","📊"];
 
-// ── Notice Post Modal ─────────────────────────────────────────────────────────
+// ── Notice Modal ──────────────────────────────────────────────────────────────
 function NoticeModal({ onClose, onPosted, userRole }) {
   const [form,    setForm]    = useState({ title:"", body:"", icon:"📢", type:"notice", pinned:false });
   const [loading, setLoading] = useState(false);
   const [err,     setErr]     = useState("");
-
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const submit = async () => {
@@ -343,19 +339,16 @@ function NoticeModal({ onClose, onPosted, userRole }) {
         </div>
         <div className="nm-body">
           {err && <div className="nm-err">{err}</div>}
-
           <div className="nm-field">
             <span className="nm-label">Title *</span>
             <input className="nm-input" placeholder="e.g. Server maintenance tonight" maxLength={80}
               value={form.title} onChange={e => set("title", e.target.value)} />
           </div>
-
           <div className="nm-field">
             <span className="nm-label">Description (optional)</span>
             <textarea className="nm-textarea" placeholder="Add more details…" maxLength={300}
               value={form.body} onChange={e => set("body", e.target.value)} />
           </div>
-
           <div className="nm-field">
             <span className="nm-label">Type</span>
             <select className="nm-select" value={form.type} onChange={e => set("type", e.target.value)}>
@@ -365,7 +358,6 @@ function NoticeModal({ onClose, onPosted, userRole }) {
               <option value="success">✅ Success</option>
             </select>
           </div>
-
           <div className="nm-field">
             <span className="nm-label">Icon</span>
             <div className="nm-icon-grid">
@@ -375,7 +367,6 @@ function NoticeModal({ onClose, onPosted, userRole }) {
               ))}
             </div>
           </div>
-
           {userRole === "admin" && (
             <label className="nm-pin-row">
               <input className="nm-pin-chk" type="checkbox" checked={form.pinned}
@@ -383,7 +374,6 @@ function NoticeModal({ onClose, onPosted, userRole }) {
               <span className="nm-pin-lbl">📌 Pin this notice to the top</span>
             </label>
           )}
-
           <button className="nm-submit" onClick={submit} disabled={loading}>
             {loading ? "Posting…" : "Post Notice"}
           </button>
@@ -396,6 +386,8 @@ function NoticeModal({ onClose, onPosted, userRole }) {
 // ── Main Dashboard ────────────────────────────────────────────────────────────
 export default function Dashboard() {
   const [stats,       setStats]       = useState({ totalProjects:0, totalTasks:0, completedTasks:0 });
+  // ✅ Real tasks state — grouped by status
+  const [kanban,      setKanban]      = useState({ todo:[], inProgress:[], done:[] });
   const [user,        setUser]        = useState(() => { try { return JSON.parse(localStorage.getItem("user")) || null; } catch { return null; } });
   const [loading,     setLoading]     = useState(true);
   const [showP,       setShowP]       = useState(false);
@@ -430,22 +422,35 @@ export default function Dashboard() {
   useEffect(() => {
     (async () => {
       try {
-        const [sR, uR] = await Promise.all([
+        const [sR, uR, tR] = await Promise.all([
           API.get("/dashboard/stats"),
           API.get("/users/me").catch(() => null),
+          API.get("/tasks").catch(() => ({ data: [] })),   // ✅ fetch real tasks
         ]);
+
         setStats(sR.data);
+
         if (uR) {
           const u = uR.data?.user || uR.data;
           setUser(u);
           localStorage.setItem("user", JSON.stringify(u));
         }
+
+        // ✅ Group tasks by status — matches your STATUS_META keys exactly
+        const allTasks = Array.isArray(tR.data) ? tR.data
+          : Array.isArray(tR.data?.tasks) ? tR.data.tasks : [];
+
+        setKanban({
+          todo:       allTasks.filter(t => t.status === "todo"),
+          inProgress: allTasks.filter(t => t.status === "inProgress"),
+          done:       allTasks.filter(t => t.status === "done"),
+        });
+
       } catch (e) { console.error(e); }
       finally { setLoading(false); }
     })();
 
     fetchNotices();
-    // poll every 30 s — new notices appear without refresh
     pollTimer.current = setInterval(fetchNotices, 30_000);
     return () => clearInterval(pollTimer.current);
   }, [fetchNotices]);
@@ -468,10 +473,16 @@ export default function Dashboard() {
     { label:"Completed Tasks", value:stats.completedTasks, icon:"🏆", glow:"rgba(16,185,129,0.2)",  iconBg:"rgba(16,185,129,0.09)", bar:"linear-gradient(90deg,#10b981,#059669)", barW:`${rate}%`, foot:`${rate}% completion rate` },
   ];
 
-  // pinned notices first (max 2), then latest non-pinned to fill up to 3 total
-  const pinned  = notices.filter(n => n.pinned);
+  const pinned   = notices.filter(n => n.pinned);
   const unpinned = notices.filter(n => !n.pinned);
   const displayNotices = [...pinned.slice(0, 2), ...unpinned.slice(0, Math.max(1, 3 - pinned.length))];
+
+  // Priority tag styles for kanban cards
+  const prioStyle = {
+    low:    { cls:"kb-tag-low",    label:"Low" },
+    medium: { cls:"kb-tag-medium", label:"Medium" },
+    high:   { cls:"kb-tag-high",   label:"High" },
+  };
 
   return (
     <>
@@ -594,6 +605,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="dash-grid">
+              {/* ── STAT CARDS ── */}
               {STAT_CARDS.map((c, i) => (
                 <div key={i} className="glass stat-card" style={{"--glow":c.glow,"--icon-bg":c.iconBg,"--bar-color":c.bar}}>
                   <div className="stat-card-top">
@@ -609,6 +621,7 @@ export default function Dashboard() {
                 </div>
               ))}
 
+              {/* ── PROGRESS CARD ── */}
               <div className="glass progress-card">
                 <div className="pc-head">
                   <div>
@@ -618,7 +631,8 @@ export default function Dashboard() {
                   <div className="pc-rate">{rate}%</div>
                 </div>
                 <div className="prog-track">
-                  <div className="prog-fill" style={{width:`${rate}%`}} />
+                  {/* ✅ Uses real rate calculated from actual completedTasks / totalTasks */}
+                  <div className="prog-fill" style={{width: rate > 0 ? `${rate}%` : "2px"}} />
                 </div>
                 <div className="prog-labels">
                   <span><strong>{stats.completedTasks}</strong> tasks done</span>
@@ -634,6 +648,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
+              {/* ── KANBAN CARD — real data ── */}
               <div className="glass kanban-card">
                 <div className="kb-head">
                   <div className="kb-title">Task Board</div>
@@ -643,29 +658,44 @@ export default function Dashboard() {
                 </div>
                 <div className="kb-cols">
                   {[
-                    {key:"todo",       label:"To Do",       cls:"kb-col-todo", data:KANBAN.todo},
-                    {key:"inProgress", label:"In Progress", cls:"kb-col-prog", data:KANBAN.inProgress},
-                    {key:"done",       label:"Done",        cls:"kb-col-done", data:KANBAN.done},
+                    { key:"todo",       label:"To Do",       cls:"kb-col-todo", data: kanban.todo       },
+                    { key:"inProgress", label:"In Progress", cls:"kb-col-prog", data: kanban.inProgress },
+                    { key:"done",       label:"Done",        cls:"kb-col-done", data: kanban.done       },
                   ].map(col => (
                     <div key={col.key} className={`kb-col ${col.cls}`}>
                       <div className="kb-col-head">
                         <span className="kb-col-title">{col.label}</span>
                         <span className="kb-count">{col.data.length}</span>
                       </div>
-                      {col.data.map((t, i) => (
-                        <div key={i} className="kb-task">
-                          <div className="kb-task-title">{t.title}</div>
-                          <div className="kb-task-meta">
-                            <span className={`kb-tag ${t.tag_cls}`}>{t.tag}</span>
-                            <div className="kb-avatar-row">
-                              {t.assignees.map((a, j) => (
-                                <div key={j} className="kb-mini-av">{a}</div>
-                              ))}
+                      {col.data.length === 0 ? (
+                        <div className="kb-empty">Nothing here yet</div>
+                      ) : (
+                        // Show max 4 tasks per column to keep dashboard clean
+                        col.data.slice(0, 4).map((t, i) => {
+                          const prio = prioStyle[t.priority] || prioStyle.medium;
+                          const assignees = (t.assignedTo || []).slice(0, 3);
+                          return (
+                            <div key={t._id || i} className="kb-task" onClick={() => navigate("/tasks")}>
+                              <div className="kb-task-title">{t.title}</div>
+                              <div className="kb-task-meta">
+                                <span className={`kb-tag ${prio.cls}`}>{prio.label}</span>
+                                <div className="kb-avatar-row">
+                                  {assignees.map((u, j) => (
+                                    <div key={j} className="kb-mini-av">
+                                      {(u.name || "?")[0].toUpperCase()}
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
                             </div>
-                          </div>
+                          );
+                        })
+                      )}
+                      {col.data.length > 4 && (
+                        <div style={{fontSize:11,color:"#94a3b8",textAlign:"center",marginTop:4}}>
+                          +{col.data.length - 4} more
                         </div>
-                      ))}
-                      {col.data.length === 0 && <div className="kb-empty">Nothing here yet</div>}
+                      )}
                     </div>
                   ))}
                 </div>
@@ -675,7 +705,6 @@ export default function Dashboard() {
         </main>
       </div>
 
-      {/* Notice modal — admin & manager only */}
       {showNoticeM && (
         <NoticeModal
           onClose={() => setShowNoticeM(false)}
@@ -684,7 +713,6 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Profile Modal */}
       {showP && (
         <div className="modal-veil" onClick={() => setShowP(false)}>
           <div className="modal-glass" onClick={e => e.stopPropagation()}>
@@ -711,7 +739,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Logout Confirm */}
       {showL && (
         <div className="modal-veil" onClick={() => setShowL(false)}>
           <div className="confirm-glass" onClick={e => e.stopPropagation()}>
