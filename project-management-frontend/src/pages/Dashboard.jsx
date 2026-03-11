@@ -214,7 +214,7 @@ const css = `
   .pc-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
   .pc-rate { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 600; background: linear-gradient(135deg, #8b5cf6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -1px; }
   .prog-track { height: 10px; background: rgba(203,213,225,0.35); border-radius: 100px; overflow: hidden; margin-bottom: 12px; }
-  .prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #8b5cf6, #6366f1, #06b6d4); background-size: 200% 100%; transition: width 1.4s cubic-bezier(0.16,1,0.3,1); animation: shimmer 3s ease-in-out infinite; position: relative; min-width: ${0}; }
+  .prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #8b5cf6, #6366f1, #06b6d4); background-size: 200% 100%; transition: width 1.4s cubic-bezier(0.16,1,0.3,1); animation: shimmer 3s ease-in-out infinite; position: relative; }
   .prog-fill::after { content: ''; position: absolute; right: -1px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; background: #fff; border: 3px solid #8b5cf6; border-radius: 50%; box-shadow: 0 2px 8px rgba(139,92,246,0.4); }
   @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
   .prog-labels { display: flex; justify-content: space-between; font-size: 12px; color: #94a3b8; }
@@ -631,8 +631,10 @@ export default function Dashboard() {
                   <div className="pc-rate">{rate}%</div>
                 </div>
                 <div className="prog-track">
-                  {/* ✅ Uses real rate calculated from actual completedTasks / totalTasks */}
-                  <div className="prog-fill" style={{width: rate > 0 ? `${rate}%` : "2px"}} />
+                  {rate > 0
+                    ? <div className="prog-fill" style={{width:`${rate}%`}} />
+                    : <div style={{height:"100%",borderRadius:"100px",background:"rgba(203,213,225,0.5)",width:"100%"}} />
+                  }
                 </div>
                 <div className="prog-labels">
                   <span><strong>{stats.completedTasks}</strong> tasks done</span>
@@ -685,6 +687,9 @@ export default function Dashboard() {
                                       {(u.name || "?")[0].toUpperCase()}
                                     </div>
                                   ))}
+                                  {(t.assignedTo || []).length === 0 && (
+                                    <span style={{fontSize:10,color:"#94a3b8"}}>Unassigned</span>
+                                  )}
                                 </div>
                               </div>
                             </div>
