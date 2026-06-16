@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import API from "../api/axios";
 import TaskCard from "./TaskCard";
 
@@ -13,11 +13,11 @@ const kbCss = `
   }
 `;
 
-// Normalize all possible status values from the backend
+// Normalize to exact DB enum values: "todo" | "inProgress" | "done"
 const normalizeStatus = (status) => {
   if (!status) return "todo";
   const s = status.toLowerCase().trim();
-  if (s === "in-progress" || s === "inprogress" || s === "in_progress" || s === "progress") return "in-progress";
+  if (s === "inprogress" || s === "in-progress" || s === "in_progress" || s === "progress") return "inProgress";
   if (s === "done" || s === "completed" || s === "complete" || s === "finished") return "done";
   return "todo";
 };
@@ -31,30 +31,32 @@ const extractTasks = (data) => {
   return [];
 };
 
-function KanbanBoard({ projectId }) {
-
+function KanbanBoard({ projectId, onProgressChange }) {
   const [tasks, setTasks] = useState([]);
 
-  useEffect(() => {
+  const fetchTasks = useCallback(async () => {
     if (!projectId) return;
-
-    const fetchTasks = async () => {
-      try {
-        const res = await API.get(`/tasks/project/${projectId}`);
-        const list = extractTasks(res.data);
-        // Normalize status on each task so filtering always works
-        setTasks(list.map(t => ({ ...t, status: normalizeStatus(t.status) })));
-      } catch (error) {
-        console.log("KanbanBoard fetch error:", error);
-        setTasks([]);
-      }
-    };
-
-    fetchTasks();
+    try {
+      const res = await API.get(`/tasks/project/${projectId}`);
+      const list = extractTasks(res.data);
+      setTasks(list.map(t => ({ ...t, status: normalizeStatus(t.status) })));
+    } catch (error) {
+      console.log("KanbanBoard fetch error:", error);
+      setTasks([]);
+    }
   }, [projectId]);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { fetchTasks(); }, [projectId]);
+
+  // Called by TaskCard when a status changes — refreshes tasks + progress bar
+  const handleStatusChange = () => {
+    fetchTasks();
+    if (onProgressChange) onProgressChange();
+  };
+
   const todoTasks     = tasks.filter((task) => task.status === "todo");
-  const progressTasks = tasks.filter((task) => task.status === "in-progress");
+  const progressTasks = tasks.filter((task) => task.status === "inProgress");
   const doneTasks     = tasks.filter((task) => task.status === "done");
 
   return (
@@ -67,7 +69,9 @@ function KanbanBoard({ projectId }) {
           <h3>📋 Todo ({todoTasks.length})</h3>
           {todoTasks.length === 0
             ? <div className="kb-empty-col">No tasks</div>
-            : todoTasks.map((task) => <TaskCard key={task._id} task={task} />)
+            : todoTasks.map((task) => (
+                <TaskCard key={task._id} task={task} onStatusChange={handleStatusChange} />
+              ))
           }
         </div>
 
@@ -76,7 +80,9 @@ function KanbanBoard({ projectId }) {
           <h3>🔵 In Progress ({progressTasks.length})</h3>
           {progressTasks.length === 0
             ? <div className="kb-empty-col">No tasks</div>
-            : progressTasks.map((task) => <TaskCard key={task._id} task={task} />)
+            : progressTasks.map((task) => (
+                <TaskCard key={task._id} task={task} onStatusChange={handleStatusChange} />
+              ))
           }
         </div>
 
@@ -85,7 +91,9 @@ function KanbanBoard({ projectId }) {
           <h3>✅ Done ({doneTasks.length})</h3>
           {doneTasks.length === 0
             ? <div className="kb-empty-col">No tasks</div>
-            : doneTasks.map((task) => <TaskCard key={task._id} task={task} />)
+            : doneTasks.map((task) => (
+                <TaskCard key={task._id} task={task} onStatusChange={handleStatusChange} />
+              ))
           }
         </div>
 

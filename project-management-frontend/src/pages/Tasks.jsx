@@ -481,7 +481,7 @@ function TaskDrawer({task,currentUser,onClose,onStatusChange}){
         </div>
         {task.description&&<div className="tk-drawer-row"><div className="tk-drawer-section">Description</div><div className="tk-drawer-val">{task.description}</div></div>}
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-          <div className="tk-drawer-row"><div className="tk-drawer-section">Project</div><div className="tk-drawer-val">{task.project?.name||"—"}</div></div>
+          <div className="tk-drawer-row"><div className="tk-drawer-section">Project</div><div className="tk-drawer-val">{task.project?.title||"—"}</div></div>
           <div className="tk-drawer-row"><div className="tk-drawer-section">Group</div><div className="tk-drawer-val">{task.group?.name||"—"}</div></div>
           <div className="tk-drawer-row"><div className="tk-drawer-section">Priority</div><span className="tk-badge" style={{background:pm.bg,color:pm.color,marginTop:2}}>{pm.icon} {pm.label}</span></div>
           <div className="tk-drawer-row"><div className="tk-drawer-section">Deadline</div><div className="tk-drawer-val">{fmt(task.deadline)}</div>{dl&&<span className={`tk-badge ${dl.cls}`} style={{marginTop:4,alignSelf:"flex-start"}}>{dl.label}</span>}</div>
@@ -513,7 +513,7 @@ function TaskDrawer({task,currentUser,onClose,onStatusChange}){
 
 export default function Tasks(){
   const [tasks,setTasks]=useState([]); const [groups,setGroups]=useState([]); const [projects,setProjects]=useState([]); const [users,setUsers]=useState([]); const [loading,setLoading]=useState(true);
-  const groupsSupported = false;
+  const groupsSupported = true;
   const [user,setUser]=useState(()=>{try{return JSON.parse(localStorage.getItem("user"))||null}catch{return null}});
   const [view,setView]=useState("board"); const [filterP,setFilterP]=useState(""); const [filterS,setFilterS]=useState(""); const [filterPr,setFilterPr]=useState(""); const [search,setSearch]=useState("");
   const [taskModal,setTaskModal]=useState(null); const [assignModal,setAssignModal]=useState(null); const [groupModal,setGroupModal]=useState(null); const [drawer,setDrawer]=useState(null);
@@ -522,14 +522,15 @@ export default function Tasks(){
   const load=useCallback(async()=>{
     setLoading(true);
     try{
-      const [tR,pR,uR,meR]=await Promise.all([
+      const [tR,pR,uR,meR,gR]=await Promise.all([
         API.get("/tasks").catch(()=>({data:[]})),
         API.get("/projects").catch(()=>({data:[]})),
         isAdmin||isManager?API.get("/users").catch(()=>({data:[]})):Promise.resolve({data:[]}),
         API.get("/users/me").catch(()=>null),
+        API.get("/groups").catch(()=>({data:[]})),
       ]);
       const toArr=d=>{if(Array.isArray(d))return d;if(Array.isArray(d?.tasks))return d.tasks;if(Array.isArray(d?.groups))return d.groups;if(Array.isArray(d?.projects))return d.projects;if(Array.isArray(d?.users))return d.users;if(Array.isArray(d?.data))return d.data;return[]};
-      setTasks(toArr(tR.data));setGroups([]);setProjects(toArr(pR.data));setUsers(toArr(uR.data));
+      setTasks(toArr(tR.data));setGroups(toArr(gR.data));setProjects(toArr(pR.data));setUsers(toArr(uR.data));
       if(meR){const u=meR.data?.user||meR.data;if(u?._id){setUser(u);localStorage.setItem("user",JSON.stringify(u));}}
     }catch(e){console.error(e)}finally{setLoading(false)}
   },[isAdmin,isManager]);
@@ -622,7 +623,7 @@ export default function Tasks(){
                   <div key={t._id} className="glass tk-row" style={{animationDelay:`${i*0.04}s`}} onClick={()=>setDrawer(t)}>
                     <span className="tk-badge" style={{background:stat.bg,color:stat.color,flexShrink:0}}>{stat.icon} {stat.label}</span>
                     <div className="tk-row-title">{t.title}</div>
-                    <div className="tk-row-project">{t.project?.name||"—"}</div>
+                    <div className="tk-row-project">{t.project?.title||"—"}</div>
                     <span className="tk-badge" style={{background:prio.bg,color:prio.color,flexShrink:0}}>{prio.icon} {prio.label}</span>
                     {dl&&<span className={`tk-badge ${dl.cls}`} style={{flexShrink:0}}>{dl.label}</span>}
                     <div className="tk-assignees" style={{flexShrink:0}}>{(t.assignedTo||[]).slice(0,3).map(u=><div key={u._id} className="tk-av" title={u.name}>{(u.name||"?")[0].toUpperCase()}</div>)}</div>
@@ -638,7 +639,7 @@ export default function Tasks(){
                   :groups.filter(g=>!filterP||(g.project?._id||g.project)===filterP).map((g,i)=>(
                   <div key={g._id} className="glass tk-group-card" style={{animationDelay:`${i*0.06}s`}}>
                     <div className="tk-group-card-top">
-                      <div><div className="tk-group-name" style={{color:g.color}}>{g.name}</div><div className="tk-group-project">{g.project?.name||"—"}</div></div>
+                      <div><div className="tk-group-name" style={{color:g.color}}>{g.name}</div><div className="tk-group-project">{g.project?.title||"—"}</div></div>
                       {(isAdmin||isManager)&&<div className="tk-group-card-actions"><button className="tk-card-btn tk-card-edit" onClick={()=>setGroupModal(g)}>✏️</button>{isAdmin&&<button className="tk-card-btn tk-card-del" onClick={()=>deleteGroup(g._id)}>🗑</button>}</div>}
                     </div>
                     {g.description&&<div style={{fontSize:11,color:"#94a3b8",marginBottom:4}}>{g.description}</div>}

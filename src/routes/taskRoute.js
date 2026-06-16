@@ -12,7 +12,7 @@ const populate = (q) =>
     .populate("assignedTo", "name email role")
     .populate("createdBy",  "name email role")
     .populate("group",      "name color")
-    .populate("project",    "name");
+    .populate("project",    "title");
 
 // ── GET /api/tasks  — all tasks (filtered by role) ───────────────────────────
 router.get("/", authenticate, async (req, res) => {
@@ -194,7 +194,7 @@ export async function floatDeadlineNotices() {
     deadline:        { $gte: now, $lte: in48h },
     deadlineNoticed: false,
     status:          { $ne: "done" },
-  }).populate("assignedTo", "name _id").populate("project", "name");
+  }).populate("assignedTo", "name _id").populate("project", "title");
 
   let count = 0;
 
@@ -205,7 +205,7 @@ export async function floatDeadlineNotices() {
     // Float one notice per urgent task
     await Notice.create({
       title:        `⏰ Deadline in ${hoursLeft}h: ${task.title}`,
-      body:         `Assigned to: ${assigneeNames} · Project: ${task.project?.name || "—"}`,
+      body:         `Assigned to: ${assigneeNames} · Project: ${task.project?.title || "—"}`,
       icon:         "⚠️",
       type:         "alert",
       pinned:       true,

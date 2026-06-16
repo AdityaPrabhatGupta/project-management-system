@@ -383,7 +383,7 @@ export default function ProjectDetails() {
                     <div className="proj-desc">{project.description||"No description provided."}</div>
                     <div className="proj-meta-row">
                       {project.createdBy && <span className="proj-meta-item">👤 Created by <strong>{project.createdBy.name}</strong></span>}
-                      {project.assignedTo?.length > 0 && <span className="proj-meta-item">👥 <strong>{project.assignedTo.length}</strong> assignees</span>}
+                      {project.members?.length > 0 && <span className="proj-meta-item">👥 <strong>{project.members.length}</strong> assignees</span>}
                     </div>
                   </>
                 ) : (
@@ -436,7 +436,7 @@ export default function ProjectDetails() {
 
               <div className="glass kanban-card">
                 <div className="kb-head"><div className="kb-title">Task Board</div></div>
-                <KanbanBoard projectId={id} />
+                <KanbanBoard projectId={id} onProgressChange={() => API.get(`/projects/${id}/progress`).then(res => setProgress(res.data))} />
               </div>
             </>
           )}

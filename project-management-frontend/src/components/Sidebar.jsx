@@ -225,6 +225,15 @@ export default function Sidebar({ activePage }) {
           onClick={() => nav("/tasks")}>
           <span className="sb-dot"/>Tasks
         </div>
+        {user?.role === "admin" && (
+          <>
+            <div className="sb-section">Admin</div>
+            <div className={`sb-item${activePage === "users" ? " active" : ""}`}
+              onClick={() => nav("/admin/users")}>
+              <span className="sb-dot"/>Users
+            </div>
+          </>
+        )}
       </nav>
 
       {/* ── NOTICES ── */}

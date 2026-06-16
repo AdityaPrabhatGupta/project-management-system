@@ -8,7 +8,7 @@ const populate = (q) =>
   q
     .populate("members",   "name email role")
     .populate("createdBy", "name email")
-    .populate("project",   "name");
+    .populate("project",   "title");
 
 // ── GET /api/groups?project=<id> ─────────────────────────────────────────────
 router.get("/", authenticate, async (req, res) => {

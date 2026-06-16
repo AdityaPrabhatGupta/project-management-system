@@ -293,7 +293,8 @@ export default function Projects() {
       const results = await Promise.allSettled(list.map(p => API.get(`/projects/${p._id}/progress`)));
       const map = {};
       results.forEach((r, i) => { if (r.status === "fulfilled") map[list[i]._id] = r.value.data; });
-      setProgMap(map);
+      setProgMap(map)
+      ;
     } catch(e) { console.error(e); }
     finally { setLoading(false); }
   };

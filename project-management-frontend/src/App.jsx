@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import ProjectDetails from "./pages/ProjectDetails";
 import Tasks from "./pages/Tasks";
-import UserManagement from "./pages/UserManagement ";
+import UserManagement from "./pages/UserManagement";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -23,7 +23,9 @@ function App() {
       <Route path="/projects" element={
         <ProtectedRoute><Projects /></ProtectedRoute>
       } />
-<Route path="/admin/users" element={<UserManagement />} />
+      <Route path="/admin/users" element={
+        <ProtectedRoute><UserManagement /></ProtectedRoute>
+      } />
 
       <Route path="/projects/:id" element={
         <ProtectedRoute><ProjectDetails /></ProtectedRoute>

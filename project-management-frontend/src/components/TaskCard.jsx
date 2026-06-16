@@ -3,7 +3,7 @@ import API from "../api/axios";
 
 const STATUS_META = {
   "todo":        { label: "Todo",        icon: "○", color: "#64748b", bg: "rgba(100,116,139,0.1)",  dot: "#94a3b8" },
-  "in-progress": { label: "In Progress", icon: "◑", color: "#6366f1", bg: "rgba(99,102,241,0.12)",  dot: "#6366f1" },
+  "inProgress": { label: "In Progress", icon: "◑", color: "#6366f1", bg: "rgba(99,102,241,0.12)",  dot: "#6366f1" },
   "done":        { label: "Done",        icon: "●", color: "#10b981", bg: "rgba(16,185,129,0.12)",  dot: "#10b981" },
 };
 
@@ -95,7 +95,7 @@ const cardCss = `
   .tc-saving { font-size:10px; color:#a78bfa; margin-top:6px; text-align:center; }
 `;
 
-function TaskCard({ task }) {
+function TaskCard({ task, onStatusChange }) {
   const [status, setStatus]   = useState(task.status || "todo");
   const [saving, setSaving]   = useState(false);
 
@@ -105,6 +105,7 @@ function TaskCard({ task }) {
     try {
       await API.patch(`/tasks/${task._id}/status`, { status: newStatus });
       setStatus(newStatus);
+      if (onStatusChange) onStatusChange(newStatus);
     } catch (error) {
       console.log("Status update failed:", error);
     } finally {
@@ -143,8 +144,8 @@ function TaskCard({ task }) {
             ○ Todo
           </button>
           <button
-            className={`tc-btn tc-btn-prog${status === "in-progress" ? " tc-btn-active" : ""}`}
-            onClick={() => updateStatus("in-progress")}
+            className={`tc-btn tc-btn-prog${status === "inProgress" ? " tc-btn-active" : ""}`}
+            onClick={() => updateStatus("inProgress")}
             disabled={saving}
           >
             ◑ Progress
